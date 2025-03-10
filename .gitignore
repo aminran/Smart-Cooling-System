@@ -1,0 +1,9 @@
+# Ignore Keil build files
+*.axf
+*.bin
+*.hex
+*.o
+*.d
+*.lst
+*.uvoptx
+*.uvprojx
