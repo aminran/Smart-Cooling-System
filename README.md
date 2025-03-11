@@ -1,4 +1,4 @@
-**Smart Cooling System** 
+**Smart Cooling System**<br>
 This project is an embedded system implementation of a Smart Cooling System for STM32F103
 
 **Features:**
