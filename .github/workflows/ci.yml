@@ -1,0 +1,34 @@
+name: CI for Smart Cooling System 🚀
+
+on: 
+  push:
+    branches: [ main, feature-* ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Install ARM Toolchain
+        run: sudo apt-get install -y gcc-arm-none-eabi
+
+      - name: Compile the Code (Using Makefile)
+        run: make
+
+      - name: Run Unit Tests (Using Ceedling)
+        run: |
+          gem install ceedling
+          ceedling test:all
+
+      - name: Run Static Analysis (Cppcheck)
+        run: cppcheck --enable=all --suppress=missingIncludeSystem -I include src/
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: Firmware
+          path: build/
