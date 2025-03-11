@@ -4,7 +4,7 @@ This project is an embedded system implementation of a Smart Cooling System for 
 **Features:**
 - Reads temperature from a LM35 sensor
 - Controls a cooling fan based on setpoint temperature
-- use  Strategy Pattern (Function Pointers for Hardware Abstraction) and  Layered Architecture (Separation of Hardware & Software) in 
+- Use  strategy pattern (Function Pointers for Hardware Abstraction) and  Layered Architecture (Separation of Hardware & Software) in 
   embedded software developement
 
 **TODO List:**
