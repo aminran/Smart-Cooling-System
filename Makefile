@@ -1,37 +1,26 @@
 # Compiler and Linker
 CC = arm-none-eabi-gcc
 LD = arm-none-eabi-ld
-OBJCOPY = arm-none-eabi-objcopy
-CFLAGS = -mcpu=cortex-m3 -mthumb -Wall -O2
+
+# Compilation Flags
+CFLAGS = -mcpu=cortex-m3 -mthumb -Wall -g
 LDFLAGS = -T stm32f103.ld
 
-# Directories
-SRC = src
-BUILD = build
-INCLUDE = include
-
 # Source and Object Files
-SRCS = $(wildcard $(SRC)/*.c)
-OBJS = $(patsubst $(SRC)/%.c, $(BUILD)/%.o, $(SRCS))
+SRC = hal_temperature.c hal_fan.c smart_cooling.c main.c
+OBJ = $(SRC:.c=.o)
 
-# Output Binary
-TARGET = $(BUILD)/firmware.elf
+# Build Target
+all: build/firmware.elf
 
-# Compilation Rules
-all: $(TARGET)
+# Compile C files into Object files
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
-$(BUILD)/%.o: $(SRC)/%.c
-	mkdir -p $(BUILD)
-	$(CC) $(CFLAGS) -I$(INCLUDE) -c $< -o $@
+# Link Object Files into Firmware
+build/firmware.elf: $(OBJ)
+	$(LD) $(LDFLAGS) -o $@ $(OBJ)
 
-$(TARGET): $(OBJS)
-	$(LD) $(LDFLAGS) $^ -o $@
-	$(OBJCOPY) -O ihex $(TARGET) $(BUILD)/firmware.hex
-
-# Clean Build Artifacts
+# Clean Build Files
 clean:
-	rm -rf $(BUILD)
-
-# Flashing to MCU (Example using OpenOCD)
-flash: all
-	openocd -f interface/stlink.cfg -f target/stm32f1x.cfg -c "program $(TARGET) verify reset exit"
+	rm -f *.o build/firmware.elf
